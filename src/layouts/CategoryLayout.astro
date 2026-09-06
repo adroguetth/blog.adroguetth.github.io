@@ -1,0 +1,70 @@
+---
+// CategoryLayout.astro
+// Plantilla compartida por las 4 páginas de categoría (Tutoriales, Proyectos,
+// Investigaciones, Notas). Recibe ya la lista de artículos filtrada y ordenada.
+
+import BaseLayout from "./BaseLayout.astro";
+import ArticleRow from "../components/ArticleRow.astro";
+
+interface PostSummary {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  date: Date;
+  tags: string[];
+}
+
+interface Props {
+  category: string;
+  description: string;
+  posts: PostSummary[];
+}
+
+const { category, description, posts } = Astro.props;
+---
+
+<BaseLayout title={category} description={description}>
+  <section class="page category-header">
+    <p class="eyebrow">Categoría</p>
+    <h1>{category}</h1>
+    <p class="category-header__description">{description}</p>
+  </section>
+
+  <section class="page category-list">
+    {posts.length > 0 ? (
+      posts.map((post) => (
+        <ArticleRow
+          slug={post.slug}
+          title={post.title}
+          description={post.description}
+          category={post.category}
+          date={post.date}
+          tags={post.tags}
+        />
+      ))
+    ) : (
+      <p class="meta">Todavía no hay artículos en esta categoría.</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .category-header {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+
+  .category-header h1 {
+    font-size: 1.9rem;
+    margin: 0.4rem 0 0.6rem;
+  }
+
+  .category-header__description {
+    color: var(--color-text-secondary);
+    max-width: 50ch;
+  }
+
+  .category-list {
+    padding: 1rem 1.5rem 3rem;
+  }
+</style>

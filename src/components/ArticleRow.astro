@@ -1,0 +1,93 @@
+---
+// ArticleRow.astro
+// Una fila de la lista editorial de artículos (se usa en Inicio, categorías y Archivo).
+// Deliberadamente NO es una "tarjeta" grande con imagen: es una fila de texto,
+// como un índice de revista o un archivo de notas.
+
+import { formatDate, tagToSlug } from "../lib/utils";
+
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  date: Date;
+  tags: string[];
+}
+
+const { slug, title, description, category, date, tags } = Astro.props;
+const categorySlug = category.toLowerCase();
+---
+
+<article class="article-row">
+  <div class="article-row__meta">
+    <a href={`/${categorySlug}/`} class="article-row__category">{category}</a>
+    <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  </div>
+
+  <h3 class="article-row__title">
+    <a href={`/articulo/${slug}/`}>{title}</a>
+  </h3>
+
+  <p class="article-row__description">{description}</p>
+
+  {tags.length > 0 && (
+    <ul class="tag-list article-row__tags">
+      {tags.map((tag) => (
+        <li class="tag">
+          <a href={`/tag/${tagToSlug(tag)}/`}>{tag}</a>
+        </li>
+      ))}
+    </ul>
+  )}
+</article>
+
+<style>
+  .article-row {
+    padding: 1.6rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .article-row:first-child {
+    padding-top: 0;
+  }
+
+  .article-row__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  .article-row__category {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .article-row__meta time::before {
+    content: "·";
+    margin-right: 0.75rem;
+    color: var(--color-border);
+  }
+
+  .article-row__title {
+    font-size: 1.25rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .article-row__title a:hover {
+    color: var(--color-accent);
+  }
+
+  .article-row__description {
+    color: var(--color-text-secondary);
+    margin: 0 0 0.7rem;
+    max-width: 60ch;
+  }
+
+  .article-row__tags {
+    margin: 0;
+  }
+</style>

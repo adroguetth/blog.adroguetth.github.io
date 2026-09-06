@@ -1,0 +1,58 @@
+---
+// Footer.astro
+// Pie de página con enlaces a redes y a la web principal.
+// Cambia las URLs de GitHub / LinkedIn aquí cuando las tengas listas.
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="page site-footer__inner">
+    <p class="site-footer__copy">© {year} Alfonso Droguett</p>
+    <ul class="site-footer__links">
+      <li><a href="https://github.com/adroguetth" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/adroguetth/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://adroguetth.github.io/" target="_blank" rel="noopener">adroguett.com</a></li>
+      <li><a href="/rss.xml">RSS</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    margin-top: 4rem;
+    padding: 2rem 0 3rem;
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-footer__copy {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .site-footer__links {
+    display: flex;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-footer__links a {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+  }
+
+  .site-footer__links a:hover {
+    color: var(--color-accent);
+  }
+</style>

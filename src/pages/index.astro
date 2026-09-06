@@ -1,0 +1,182 @@
+---
+// index.astro — Página principal del blog.
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleRow from "../components/ArticleRow.astro";
+import { getCollection } from "astro:content";
+
+const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+
+const categories = [
+  {
+    name: "Tutoriales",
+    slug: "tutoriales",
+    description: "Guías paso a paso: SQL, Python, automatización y más.",
+  },
+  {
+    name: "Proyectos",
+    slug: "proyectos",
+    description: "Proyectos reales, documentados de principio a fin.",
+  },
+  {
+    name: "Investigaciones",
+    slug: "investigaciones",
+    description: "Exploraciones y análisis sobre datos y tecnología.",
+  },
+  {
+    name: "Notas",
+    slug: "notas",
+    description: "Apuntes breves, aprendizajes sueltos, ideas en curso.",
+  },
+];
+---
+
+<BaseLayout
+  title="adroguett."
+  description="Un archivo personal sobre datos, programación, automatización y tecnología."
+>
+  <section class="hero page">
+    <h1>Notas, proyectos e investigaciones</h1>
+    <p>
+      Un archivo personal sobre datos, programación, automatización, tecnología
+      y las cosas que voy aprendiendo mientras las construyo.
+    </p>
+  </section>
+
+  <section class="page section">
+    <div class="section__header">
+      <h2>Recientes</h2>
+      <a href="/archivo/" class="text-link">Ver todo el archivo</a>
+    </div>
+
+    {recentPosts.length > 0 ? (
+      <div>
+        {recentPosts.map((post) => (
+          <ArticleRow
+            slug={post.id}
+            title={post.data.title}
+            description={post.data.description}
+            category={post.data.category}
+            date={post.data.date}
+            tags={post.data.tags}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="meta">Todavía no hay artículos publicados. Vuelve pronto.</p>
+    )}
+  </section>
+
+  <section class="page section">
+    <h2>Categorías</h2>
+    <div class="category-grid">
+      {categories.map((cat) => (
+        <a href={`/${cat.slug}/`} class="category-card">
+          <h3>{cat.name}</h3>
+          <p>{cat.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="page section section--about">
+    <h2>Sobre este blog</h2>
+    <p>
+      Este es un archivo personal, no un sitio corporativo. Aquí guardo
+      tutoriales, proyectos, investigaciones y notas técnicas relacionadas con
+      datos, programación y automatización, principalmente para tener un
+      registro propio que no dependa de ninguna plataforma externa.
+    </p>
+    <p>
+      Si buscas información sobre servicios o trabajo profesional, esa parte
+      vive en <a href="https://adroguetth.github.io/" class="text-link" target="_blank" rel="noopener">adroguett.com</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 3.5rem 1.5rem 2.5rem;
+    max-width: 44rem;
+  }
+
+  .hero h1 {
+    font-size: 2.1rem;
+    margin: 0 0 0.9rem;
+  }
+
+  .hero p {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    max-width: 40ch;
+  }
+
+  .section {
+    padding: 2.5rem 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section h2 {
+    font-size: 1.4rem;
+    margin: 0 0 1.4rem;
+  }
+
+  .section__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .section__header h2 {
+    margin: 0;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+  }
+
+  .category-card {
+    background: var(--color-bg);
+    padding: 1.5rem;
+  }
+
+  .category-card:hover {
+    background: var(--color-bg-raised);
+  }
+
+  .category-card h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.1rem;
+  }
+
+  .category-card p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .section--about p {
+    max-width: 60ch;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding: 2.5rem 1.25rem 2rem;
+    }
+    .hero h1 {
+      font-size: 1.7rem;
+    }
+    .category-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
